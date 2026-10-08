@@ -1,47 +1,41 @@
 const http = require("http");
 
 const PORT = process.env.PORT || 3000;
+const APP_ENV = process.env.APP_ENV || "development";
 
-const server = http.createServer((req, res) => {
+function createServer() {
+    return http.createServer((req, res) => {
+        console.log(`${req.method} ${req.url}`);
 
-    console.log(`${req.method} ${req.url}`);
+        if (req.url === "/health") {
+            res.writeHead(200, {
+                "Content-Type": "application/json"
+            });
 
-    // if (req.url === "/crash") {
-    //     throw new Error("Something went terribly wrong");
-    // }
+            res.end(JSON.stringify({
+                status: "UP"
+            }));
 
-    if (req.url === "/health") {
+            return;
+        }
+
         res.writeHead(200, {
             "Content-Type": "application/json"
         });
 
         res.end(JSON.stringify({
-            status: "Healthy!"
+            message: "Hello from my DevOps application!",
+            environment: APP_ENV
         }));
-        return;
-    }
-
-    if (req.url === "/env") {
-        res.writeHead(200, {
-            "Content-Type": "application/json"
-        });
-
-        res.end(JSON.stringify({
-            env: process.env.APP_ENV
-        }));
-        return;
-    }
-
-    res.writeHead(200, {
-        "Content-Type": "application/json"
     });
+}
 
-    res.end(JSON.stringify({
-        message: "Hello from my DevOps application!"
-    }));
-});
+if (require.main === module) {
+    const server = createServer();
 
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+    server.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
 
+module.exports = { createServer };
