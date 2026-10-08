@@ -18,7 +18,7 @@ test("GET /health returns UP", async () => {
 
         assert.equal(response.status, 200);
         assert.deepEqual(body, {
-            status: "DOWN"
+            status: "UP"
         });
     } finally {
         server.close();
