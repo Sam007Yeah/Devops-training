@@ -51,7 +51,8 @@ function createServer() {
         res.writeHead(200);
         res.end(JSON.stringify({
             message: "Hello from my DevOps application!",
-            environment: APP_ENV
+            environment: APP_ENV,
+            version: "2.0.0"
         }));
     });
 }
